@@ -40,12 +40,5 @@ nosetests.xml
 
 # Virtual environment
 venv
-.idea/.gitignore
-.idea/dictionaries/
-.idea/flasky.iml
-.idea/inspectionProfiles/
-.idea/libraries/
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
 .DS_Store
+/.idea/
