@@ -1,34 +1,25 @@
 from datetime import datetime
 from flask import Flask, render_template, session, redirect, url_for, flash
 from . import main
-from .forms import NameForm, EditProfileForm
+from .forms import PostForm, EditProfileForm
 from flask_login import current_user, login_required
 from .. import db
-from ..models import User
+from ..models import User, Permission, Post
 
 
 @main.route("/", methods=['GET', 'POST'])
 def index():
     name = None
-    form = NameForm()
-    if form.validate_on_submit():
-        # user = User.query.filter_by(useranme=form.name.data).first()
-        # if user is None:
-        #     user = User(form.name.data)
-        #     db.session.add(user)
-        #     db.session.commit()
-        #     session['known'] = False
-        #     if app.config['FLASKY_ADMIN']:
-        #         send_mail(app.config['FLASKY_ADMIN'], 'New User', 'mail/new_user', user=user)
-        # else:
-        #     session['known'] = True
-        # session['name'] = form.name.data
-        # form.name.data = ''
-        return redirect(url_for('index'))
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('.index'))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template("index.html",
-                           form=form, name=session.get('name'),
-                           known=session.get('known', False),
-                           current_time=datetime.utcnow())
+                           form=form, posts=posts)
 
 
 @main.route('/user/<username>')
