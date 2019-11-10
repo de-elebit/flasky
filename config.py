@@ -13,6 +13,8 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[De.Elebit]'
     FLASKY_MAIL_SENDER = 'De.Elebit <de.elebit@gmail.com>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    FLAKSY_POSTS_PER_PAGE = 10
+    FLASKY_FOLLOWERS_PER_PAGE = 5
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
